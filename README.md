@@ -1,5 +1,5 @@
 # Hazards of a single cycle pipelined processor
-This repository goal is to study hazards of a single cycle pipelined processor. In order to do that the same assembly code, derived from the C code named as pseudo-code-algorithm , will be adjusted to work properly in different processors. This repository explore with more attention the implication of following topics in our code:
+This repository goal is to study hazards of a single cycle pipelined processor. In order to do that the same assembly code, derived from the C code named as pseudo-code-algorithm , will be adjusted to work properly in different processors. This repository explore with more attention the implication of following topics in our assembly code:
 - Data forwarding
 - Hazard detection
 - Possible processor stages to do the branch comparatiom
