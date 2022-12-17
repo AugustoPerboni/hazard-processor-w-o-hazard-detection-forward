@@ -1,5 +1,8 @@
-# hazard-processor-w-o-hazard-detection-forward
-This repository is a pratical exercise to understanding the hazards related to a single cycle processor with four pile line stages. 
-In order to do that, the C code named as pseudo-code-algorithm was converted to assembly with no corrections related to the processor arquiteture. The goal of this exercise is to study the code and make the necessary corrections, based in the processor arquitetura, with the objective to it work as desire.  Each folder correspond to a processor with different capabilitys of hazard detection and forwarding.
+# Hazards of a single cycle pipelined processor
+This repository goal is to study hazards of a single cycle pipelined processor. In order to do that the same assembly code, derived from the C code named as pseudo-code-algorithm , will be adjusted to work properly in different processors. This repository explore with more attention the implication of following topics in our assembly code:
+- Data forwarding
+- Hazard detection
+- Possible processor stages to do the branch comparatiom
 
-All the codes in assembly use RISC-V instruction set
+In the root of the repository each folder correspond to a processor with different capabilitys.
+**The intruction set used to do that task was RISC-V.**
