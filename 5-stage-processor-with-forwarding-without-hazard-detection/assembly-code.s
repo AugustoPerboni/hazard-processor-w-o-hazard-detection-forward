@@ -34,7 +34,7 @@ n:.word  0
 
 # while (b[1] > 0)
 while:  add x20, x13, x16       # x20 = &b[i]
-        lw x21, 0(x20)	# x21 = b[i]
+        lw x21, 0(x20)	        # x21 = b[i]
         nop
         nop
         blez x21, end		# if b[i] <= 0 end the loop
