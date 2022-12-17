@@ -5,4 +5,4 @@ This repository goal is to study hazards of a single cycle pipelined processor. 
 - Possible processor stages to do the branch comparatiom
 
 In the root of the repository each folder correspond to a processor with different capabilitys.
-*The intruction set used to do that task was RISC-V.*
+**The intruction set used to do that task was RISC-V.**
