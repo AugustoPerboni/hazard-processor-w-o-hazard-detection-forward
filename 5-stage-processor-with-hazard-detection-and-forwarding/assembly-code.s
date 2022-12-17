@@ -14,7 +14,7 @@
 #    }
 
 ##### For this CPU it is not necessary any correction in order to have the code working properly ####
-# Obs: Efficiency was not studied in this case
+# All the changes where made in to improve the code efficiency
 
 # Data section
         .data
@@ -38,10 +38,12 @@ n:		.word  0
 # while (b[1] > 0)
 while:  add x20, x13, x16	 # x20 = &b[i]
         lw	x21, 0(x20)		    # x21 = b[i]
+        lw  x22, 0(x11)		# x22 = a[i]
         blez x21, end		    # if b[i] <= 0 end the loop
-
-	   	lw  x22, 0(x11)		# x22 = a[i]             
-		   lw  x23, 0(x12)		# x23 = a[N-1-i]         
+        
+	   	             
+		   lw  x23, 0(x12)		# x23 = a[N-1-i]  
+         addi 	x16, x16, 4		# i++       
 		   add x22, x22, x23 # x22 = a[i] + a[N-1-i]
 		   mul x15, x15, x22	# x15 = x15*x22, >>>(x *= a[i] + a[N-1-i])<<<
 
@@ -49,7 +51,7 @@ while:  add x20, x13, x16	 # x20 = &b[i]
 		   srai	x22, x22, 2	# x22 = x22/4, conversion from bytes to words of 32 bits 
 		   add	x14, x14, x22	# n += x22, >>>(n += (N-1-i) ? i)<<<
 
-		   addi 	x16, x16, 4		# i++
+		   
 
 		   addi	x11, x11, 4
 		   addi	x12, x12, -4
