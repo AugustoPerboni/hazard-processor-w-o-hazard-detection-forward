@@ -10,19 +10,18 @@
 #    }
 
 # Data section
-        .data
+.data
 # IMPORTANT: do not change this section
-a:	.word  1, 5, 6, 6, 7, 2, 5, 2, 3, 2, 3, 4
-b:	.word  4, 3, 1, 7, 2, 4, 9, -3, 5, 8, 1, 9
-x: 	.word  1
-n:	.word  0   
+a: .word  1, 5, 6, 6, 7, 2, 5, 2, 3, 2, 3, 4
+b: .word  4, 3, 1, 7, 2, 4, 9, -3, 5, 8, 1, 9
+x: .word  1
+n: .word  0   
 
 # Program section
-		.text
+.text
 # NOTE: Upon start, the Global-Pointer (gp=x3) points to the beginning of .data section
         addi x11, x3, 0		# x11 - a's left index
         addi x13, x11, 48	# x13 - b's left index
-<<<<<<< Updated upstream
 	addi x12, x13, -4	# x12 - a's right index
 
 	lw x14, 100(x3)	    	# x14 - n - index distance accumulator
@@ -40,7 +39,7 @@ while:  add x20, x13, x16	# x20 = &b[i]
 	mul x15, x15, x22	# x15 = x15*x22, >>>(x *= a[i] + a[N-1-i])<<<
 
 	sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-i) - i
-	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
+	add x14, x14, x22	# (n += (N-1-i) â€“ i), but keeping the values in bytes no words
 
 ################################################
 
@@ -54,7 +53,7 @@ while:  add x20, x13, x16	# x20 = &b[i]
 
         sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-(i+1) - (i+1))
         addi x22, x22, -8   	# Correction of i value
-	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
+	add x14, x14, x22	# (n += (N-1-i) â€“ i), but keeping the values in bytes no words
 
 	addi x16, x16, 8  	# i++
 	addi x11, x11, 8
@@ -81,7 +80,7 @@ while:  add x20, x13, x16	# x20 = &b[i]
 	mul x15, x15, x22	# x15 = x15*x22, >>>(x *= a[i] + a[N-1-i])<<<
 
 	sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-i) - i
-	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
+	add x14, x14, x22	# (n += (N-1-i) â€“ i), but keeping the values in bytes no words
 ################################################
         lw x21, 4(x20)	    	# x21 = b[i+1]
         lw x22, 4(x11)		# x22 = a[i+1]             
@@ -93,7 +92,7 @@ while:  add x20, x13, x16	# x20 = &b[i]
 
         sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-(i+1) - (i+1))
         addi x22, x22, -8   	# Correction of i value
-	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
+	add x14, x14, x22	# (n += (N-1-i) â€“ i), but keeping the values in bytes no words
 
 	addi x16, x16, 8  	# 2*i++
 	addi x11, x11, 8
