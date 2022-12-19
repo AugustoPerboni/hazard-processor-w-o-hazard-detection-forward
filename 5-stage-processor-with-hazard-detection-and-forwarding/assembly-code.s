@@ -1,7 +1,3 @@
-# The following program processes two arbitrarily sized one-dimensional
-# vectors composed by N integer elements, in order to execute
-# the following pseudo-code algorithm:
- 
 #    int a[N] = { ..... }
 #    int b[N] = { ..... }
 #    int x = 1;
@@ -12,9 +8,6 @@
 #        n += (N-1-i) - i;
 #        i ++;
 #    }
-
-##### For this CPU it is not necessary any correction in order to have the code working properly ####
-# All the changes where made in to improve the code efficiency
 
 # Data section
         .data
@@ -27,43 +20,52 @@ n:	.word  0
 # Program section
 		.text
 # NOTE: Upon start, the Global-Pointer (gp=x3) points to the beginning of .data section
-        addi x11, x3, 0		 # x11 - a's left index
-        addi x13, x11, 48	 # x13 - b's left index
-        addi x12, x13, -4        # x12 - a's right index
-		
-	lw x14, 100(x3)	         # x14 - n - index distance accumulator
-	lw x15, 96(x3)	         # x15 - x = 1
-	li x16, 0		 # x16 - i = 0
+        addi x11, x3, 0		# x11 - a's left index
+        addi x13, x11, 48	# x13 - b's left index
+	addi x12, x13, -4	# x12 - a's right index
+
+	lw x14, 100(x3)	    	# x14 - n - index distance accumulator
+	lw x15, 96(x3)	   	# x15 - x = 1
+	li x16, 0	        # x16 - i 
 
 # while (b[1] > 0)
-while:  add x20, x13, x16	 # x20 = &b[i]
-        lw x21, 0(x20)	         # x21 = b[i]
-        lw x22, 0(x11)		 # x22 = a[i]
-        blez x21, end		 # if b[i] <= 0 end the loop
-        
-	   	             
-	lw x23, 0(x12)		 # x23 = a[N-1-i]  
-        addi x16, x16, 4	 # i++       
-	add x22, x22, x23        # x22 = a[i] + a[N-1-i]
-	mul x15, x15, x22	 # x15 = x15*x22, >>>(x *= a[i] + a[N-1-i])<<<
+while:  add x20, x13, x16	# x20 = &b[i]
+        lw x21, 0(x20)	    	# x21 = b[i]
+        blez x21, end		# if b[i] <= 0 end the loop
 
-	sub x22, x12, x11	 # x22 = 4*((N-1-i)-i), size of bytes between (N-1-i) - i
-	srai x22, x22, 2	 # x22 = x22/4, conversion from bytes to words of 32 bits 
-	add x14, x14, x22	 # n += x22, >>>(n += (N-1-i) ? i)<<<
+	lw  x22, 0(x11)		# x22 = a[i]             
+	lw  x23, 0(x12)		# x23 = a[N-1-i]         
+	add x22, x22, x23  	# x22 = a[i] + a[N-1-i]
+	mul x15, x15, x22	# x15 = x15*x22, >>>(x *= a[i] + a[N-1-i])<<<
 
-		   
+	sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-i) - i
+	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
 
-	addi x11, x11, 4
-	addi x12, x12, -4
-	jal x0, while
+################################################
 
-end:	sw x14, 100(x3)	         # store n's final value
-	sw x15, 96(x3)  	 # store x's final value	
+        lw x21, 4(x20)	        # x21 = b[i+1]
+        blez x21, end		# if b[i+1] <= 0 end the loop
 
-	addi a7, x0, 10
+	lw  x22, 4(x11)		# x22 = a[i+1]             
+	lw  x23, -4(x12)	# x23 = a[N-1-(i+1)]         
+	add x22, x22, x23       # x22 = a[i] + a[N-1-i]
+	mul x15, x15, x22	# >>>(x *= a[i+1] + a[N-1-(i+1)])<<<
+
+        sub x22, x12, x11	# x22 = 4*((N-1-i)-i), size of bytes between (N-1-(i+1) - (i+1))
+        addi x22, x22, -8   	# Correction of i value
+	add x14, x14, x22	# (n += (N-1-i) – i), but keeping the values in bytes no words
+
+	addi x16, x16, 8  	# i++
+	addi x11, x11, 8
+	addi x12, x12, -8
+	jal  x0, while
+
+end:	srai x14 ,x14, 2 	# Conversion from bytes to words
+        sw x14, 100(x3)		# store n's final value
+	sw x15, 96(x3)		# store x's final value	
+        addi a7, x0, 10
 	ecall
   
 
 # Expected result: M[x] = 1270080 = 136140h
 #                  M[n] = 35      = 23h
-
