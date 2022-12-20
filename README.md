@@ -6,5 +6,6 @@ This repository's goal is to study the hazards of a single cycle pipelined proce
   - Renaming
   - Reordering
   - Loop unroll 
+  
 In the root of the repository, each folder corresponds to a processor with different capabilities.
 **The instruction set used to do that task was RISC-V.**
